@@ -1,5 +1,6 @@
 #include <iostream>
 #include "turbofloatex.h"
+#include "turboactivateex.h"
 #include <QCoreApplication>
 
 using namespace std;
@@ -14,7 +15,7 @@ int main(int argc, char *argv[])
     else
         cout << "TF Path NOT set correctly." << endl;
 
-    TurboFloatEx ta;
+    TurboActivateEx ta;
     if (ta.setPathTA())
         cout << "TA Path set correctly." << endl;
     else

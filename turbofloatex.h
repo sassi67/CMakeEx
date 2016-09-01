@@ -8,7 +8,6 @@ class TurboFloatEx : public QObject
     Q_OBJECT
 public:
     explicit TurboFloatEx(QObject *parent = 0);
-    bool setPathTA();
     bool setPathTF();
 
 signals:

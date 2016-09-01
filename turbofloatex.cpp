@@ -1,26 +1,15 @@
 #include "turbofloatex.h"
-#include "include/TurboActivate/TurboActivate.h"
-#include "include/TurboFloat/TurboFloat.h"
+#include "TurboFloat.h"
 
 #include <QDir>
 #include <QCoreApplication>
 
-const QString PDETS_FILE = "TurboActivate.dat";
+const QString PDETS_FILE = "dcs.info";
 
-TurboFloatEx::TurboFloatEx(QObject *parent) : QObject(parent)
+TurboFloatEx::TurboFloatEx(QObject *parent) :
+    QObject(parent)
 {
 
-}
-
-bool TurboFloatEx::setPathTA()
-{
-
-    HRESULT hr = TA_FAIL;
-    QDir datFileDir(QCoreApplication::applicationDirPath());
-    QString datFile(QDir::toNativeSeparators(QString("%1/%2").arg(datFileDir.absolutePath()).arg(PDETS_FILE)));
-
-    hr = PDetsFromPath(datFile.toStdString().c_str());
-    return (TA_OK == hr);
 }
 
 bool TurboFloatEx::setPathTF()
@@ -29,6 +18,10 @@ bool TurboFloatEx::setPathTF()
     QDir datFileDir(QCoreApplication::applicationDirPath());
     QString datFile(QDir::toNativeSeparators(QString("%1/%2").arg(datFileDir.absolutePath()).arg(PDETS_FILE)));
 
+#ifdef Q_OS_WIN
+    hr = TF_PDetsFromPath((const wchar_t*)(datFile.utf16()));
+#else
     hr = TF_PDetsFromPath(datFile.toStdString().c_str());
+#endif
     return (TF_OK == hr);
 }
