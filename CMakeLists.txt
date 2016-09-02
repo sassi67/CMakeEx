@@ -4,13 +4,13 @@ cmake_minimum_required(VERSION 2.8)
 FIND_PACKAGE(Qt4 REQUIRED COMPONENTS QtCore)
 INCLUDE(${QT_USE_FILE})
 
-set (DESTDIR ${PROJECT_SOURCE_DIR}/install)
+#set (DESTDIR ${PROJECT_SOURCE_DIR}/install)
 
 ADD_DEFINITIONS(
     ${QT_DEFINITIONS}
     -DTURBOFLOAT_STATIC
     -DTURBOACTIVATE_STATIC
-    -DCMAKE_INSTALL_PREFIX=${DESTDIR}
+#    -DCMAKE_INSTALL_PREFIX=${DESTDIR}
 )
 
 include_directories(
@@ -37,9 +37,15 @@ endif(WIN32)
 
 QT4_WRAP_CPP(MOC_HEADERS turboactivateex.h turbofloatex.h)
 
-add_library(TurboFloat STATIC IMPORTED)
-set_property(TARGET TurboFloat PROPERTY
-    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/TurboFloat.lib)
+# TurboFloat cannot be statically compiled yet
+#add_library(TurboFloat STATIC IMPORTED)
+#set_property(TARGET TurboFloat PROPERTY
+#    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/TurboFloat.lib)
+add_library(Connect SHARED IMPORTED)
+#set_property(TARGET Connect PROPERTY
+#    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/Connect.dll)
+set_property(TARGET Connect PROPERTY
+    IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/Connect.lib)
 
 add_library(TurboActivate STATIC IMPORTED)
 add_library(cryptlib STATIC IMPORTED)
@@ -53,24 +59,27 @@ set_property(TARGET curllib PROPERTY
     IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboActivate/win32/static/curllib.lib)
 
 LINK_DIRECTORIES(
-    ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/static
+    # TurboFloat cannot be statically compiled yet
+#    ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/static
+#    ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared
     ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboActivate/win32/static
 )
 
 set (_LINK_LIBRARIES
         ${QT_LIBRARIES}
-        TurboFloat
         TurboActivate
         cryptlib
         curllib
+#        TurboFloat
+        Connect
 )
 
-set (_INSTALL_FILES
-        ${PROJECT_SOURCE_DIR}/include/TurboActivate/dcs.info
-        # TurboFloat cannot be statically compiled yet
-        ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/TurboFloat.dll
-)
-install(FILES ${_INSTALL_FILES} DESTINATION ${DESTDIR})
+#set (_INSTALL_FILES
+#        ${PROJECT_SOURCE_DIR}/include/TurboActivate/dcs.info
+#        # TurboFloat cannot be statically compiled yet
+#        ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/TurboFloat.dll
+#)
+#install(FILES ${_INSTALL_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 add_executable(${PROJECT_NAME} main.cpp turboactivateex.cpp turbofloatex.cpp ${MOC_HEADERS})
 target_link_libraries(${PROJECT_NAME} ${_LINK_LIBRARIES})
