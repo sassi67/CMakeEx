@@ -1,16 +1,14 @@
 project(CMakeEx)
 cmake_minimum_required(VERSION 2.8)
 
+set(CMAKE_BUILD_TYPE Release)
 FIND_PACKAGE(Qt4 REQUIRED COMPONENTS QtCore)
 INCLUDE(${QT_USE_FILE})
 
-#set (DESTDIR ${PROJECT_SOURCE_DIR}/install)
-
 ADD_DEFINITIONS(
     ${QT_DEFINITIONS}
-    -DTURBOFLOAT_STATIC
+#    -DTURBOFLOAT_STATIC
     -DTURBOACTIVATE_STATIC
-#    -DCMAKE_INSTALL_PREFIX=${DESTDIR}
 )
 
 include_directories(
@@ -41,11 +39,12 @@ QT4_WRAP_CPP(MOC_HEADERS turboactivateex.h turbofloatex.h)
 #add_library(TurboFloat STATIC IMPORTED)
 #set_property(TARGET TurboFloat PROPERTY
 #    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/TurboFloat.lib)
-add_library(Connect SHARED IMPORTED)
+
+#add_library(Connect SHARED IMPORTED)
 #set_property(TARGET Connect PROPERTY
 #    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/Connect.dll)
-set_property(TARGET Connect PROPERTY
-    IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/Connect.lib)
+#set_property(TARGET Connect PROPERTY
+#    IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/lib/LimeLM/v3.4.7/TurboFloat/win32/shared/Connect.lib)
 
 add_library(TurboActivate STATIC IMPORTED)
 add_library(cryptlib STATIC IMPORTED)
@@ -71,7 +70,7 @@ set (_LINK_LIBRARIES
         cryptlib
         curllib
 #        TurboFloat
-        Connect
+#        Connect
 )
 
 #set (_INSTALL_FILES
